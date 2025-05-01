@@ -3,25 +3,18 @@ import { HeaderComponent } from './components/header.component.js'
 import { FooterComponent } from './components/footer.component.js'
 
 const TEXT = `
-webhook=>start: Webhook 1|past:>http://www.google.com[blank]
-e=>end: End:>http://www.google.com
-op1=>operation: My Operation|past:$myFunction
-op2=>operation: Stuff|current
-sub1=>subroutine: My Subroutine|invalid
-cond=>condition: Yes
-or No?|approved:>http://www.google.com
-c2=>condition: Good idea|rejected
-io=>inputoutput: catch something...|request
-para=>parallel: parallel tasks
+start=>start: start:>http://www.google.com[blank]
+e=>end: end:>http://www.google.com
+op1=>operation: op1:$myFunction
+op2=>operation: op2:$myFunction
+cond=>condition: yes or no?:$myFunction
+c2=>condition: good idea:$myFunction
 
-webhook->op1(right)->cond
+start->op1->cond
 cond(yes)->c2
-cond(no)->para
-c2(true)->io->e
+cond(no)->e
+c2(true)->op2->e
 c2(false)->e
-
-para(path1, bottom)->e
-para(path2)->op2->e
 `
 
 class FlowChartComponent extends HTML {
@@ -45,12 +38,11 @@ class FlowChartComponent extends HTML {
 
   onUpdate({ value } = {}) {
     const chart = flowchart.parse(TEXT)
-    chart.drawSVG('canvas', {})
-    console.log({ chart })
+    chart.drawSVG('flowchart', {})
   }
 
   getHTML() {
-    this.children.html.setAttr('id', 'canvas')
+    this.children.html.setAttr('id', 'flowchart')
     return this.children.html
   }
 }
